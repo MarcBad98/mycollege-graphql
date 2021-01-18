@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: my-mongo-username
+      MONGO_INITDB_ROOT_PASSWORD: my-mongo-password
+
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app/:/usr/src/app/
+    environment:
+      MONGO_SERVICE_HOST: mongo
+      MONGO_SERVICE_PORT: 27017
+      MONGODB_USERNAME: my-mongo-username
+      MONGODB_PASSWORD: my-mongo-password
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
