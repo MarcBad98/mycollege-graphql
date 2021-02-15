@@ -18,6 +18,7 @@ services:
     volumes:
       - ./app/:/usr/src/app/
     environment:
+      MONGO_SERVICE_DB: mycollege
       MONGO_SERVICE_HOST: mongo
       MONGO_SERVICE_PORT: 27017
       MONGODB_USERNAME: my-mongo-username

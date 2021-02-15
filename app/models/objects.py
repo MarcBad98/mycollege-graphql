@@ -1,4 +1,17 @@
 import graphene
+from graphene_mongo import MongoengineObjectType
+
+from app.models import collections
+
+
+class UserSettingsType(MongoengineObjectType):
+    class Meta:
+        model = collections.UserSettings
+
+
+class UserType(MongoengineObjectType):
+    class Meta:
+        model = collections.User
 
 
 class TestObjectType(graphene.ObjectType):
