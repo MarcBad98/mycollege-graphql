@@ -11,6 +11,18 @@ services:
       MONGO_INITDB_ROOT_USERNAME: my-mongo-username
       MONGO_INITDB_ROOT_PASSWORD: my-mongo-password
 
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8080:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: my-mongo-username
+      ME_CONFIG_MONGODB_ADMINPASSWORD: my-mongo-password
+      ME_CONFIG_BASICAUTH_USERNAME: dev
+      ME_CONFIG_BASICAUTH_PASSWORD: dev
+    depends_on:
+      - mongo
+
   app:
     build: .
     ports:
