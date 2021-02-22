@@ -45,7 +45,7 @@ class UserSettings(EmbeddedDocument):
 
 
 class User(Document):
-    keycloak_user_id = StringField()
+    keycloak_user_id = StringField(unique=True)
     full_name = StringField()
     profile = EmbeddedDocumentField(UserProfile)
     settings = EmbeddedDocumentField(UserSettings)
