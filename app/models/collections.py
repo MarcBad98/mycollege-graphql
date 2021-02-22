@@ -38,10 +38,10 @@ class UserProfile(EmbeddedDocument):
 
 
 class UserSettings(EmbeddedDocument):
-    subscription_email = BooleanField(default=False)
-    subscription_sms = BooleanField(default=False)
-    targeted_advertising = BooleanField(default=False)
-    language = StringField(default="English")
+    subscription_email = BooleanField()
+    subscription_sms = BooleanField()
+    targeted_advertising = BooleanField()
+    language = StringField()
 
 
 class User(Document):
