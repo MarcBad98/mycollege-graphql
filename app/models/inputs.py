@@ -1,7 +1,7 @@
 import graphene
 
 
-class EmploymentSectionType(graphene.InputObjectType):
+class EmploymentSectionInputType(graphene.InputObjectType):
     title = graphene.String()
     employer = graphene.String()
     date_started = graphene.Date()
@@ -10,7 +10,7 @@ class EmploymentSectionType(graphene.InputObjectType):
     description = graphene.String()
 
 
-class EducationSectionType(graphene.InputObjectType):
+class EducationSectionInputType(graphene.InputObjectType):
     degree = graphene.String()
     school = graphene.String()
     date_started = graphene.Date()
@@ -24,8 +24,8 @@ class UserProfileInputType(graphene.InputObjectType):
     major = graphene.String()
     current_university = graphene.String()
     about = graphene.String()
-    employment = graphene.List(EmploymentSectionType)
-    education = graphene.List(EducationSectionType)
+    employment = graphene.List(EmploymentSectionInputType)
+    education = graphene.List(EducationSectionInputType)
 
 
 class UserSettingsInputType(graphene.InputObjectType):
