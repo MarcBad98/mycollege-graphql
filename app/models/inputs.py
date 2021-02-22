@@ -37,5 +37,6 @@ class UserSettingsInputType(graphene.InputObjectType):
 
 class UserInputType(graphene.InputObjectType):
     keycloak_user_id = graphene.String()
+    full_name = graphene.String()
     profile = graphene.Field(UserProfileInputType)
     settings = graphene.Field(UserSettingsInputType)
