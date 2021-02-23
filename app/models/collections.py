@@ -1,6 +1,7 @@
 from mongoengine import (
     Document,
     EmbeddedDocument,
+    UUIDField,
     StringField,
     DateField,
     IntField,
@@ -11,6 +12,7 @@ from mongoengine import (
 
 
 class EmploymentSection(EmbeddedDocument):
+    id = UUIDField()
     title = StringField()
     employer = StringField()
     date_started = DateField()
@@ -20,6 +22,7 @@ class EmploymentSection(EmbeddedDocument):
 
 
 class EducationSection(EmbeddedDocument):
+    id = UUIDField()
     degree = StringField()
     school = StringField()
     date_started = DateField()

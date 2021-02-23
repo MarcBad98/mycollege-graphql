@@ -2,6 +2,7 @@ import graphene
 
 
 class EmploymentSectionInputType(graphene.InputObjectType):
+    id = graphene.UUID()
     title = graphene.String()
     employer = graphene.String()
     date_started = graphene.Date()
@@ -11,6 +12,7 @@ class EmploymentSectionInputType(graphene.InputObjectType):
 
 
 class EducationSectionInputType(graphene.InputObjectType):
+    id = graphene.UUID()
     degree = graphene.String()
     school = graphene.String()
     date_started = graphene.Date()
