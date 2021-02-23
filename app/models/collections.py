@@ -28,7 +28,6 @@ class EducationSection(EmbeddedDocument):
     date_started = DateField()
     date_ended = DateField()
     location = StringField()
-    years_attended = IntField()
 
 
 class UserProfile(EmbeddedDocument):

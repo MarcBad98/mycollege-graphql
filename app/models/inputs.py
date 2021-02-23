@@ -18,7 +18,6 @@ class EducationSectionInputType(graphene.InputObjectType):
     date_started = graphene.Date()
     date_ended = graphene.Date()
     location = graphene.String()
-    years_attended = graphene.Int()
 
 
 class UserProfileInputType(graphene.InputObjectType):
