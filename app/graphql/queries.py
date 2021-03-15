@@ -13,7 +13,7 @@ class Query(graphene.ObjectType):
         keycloak_user_id=graphene.String(required=True),
     )
     get_friends = graphene.List(
-        objects.UserType,
+        objects.FriendType,
         keycloak_user_id=graphene.String(required=True),
     )
 
@@ -27,14 +27,34 @@ class Query(graphene.ObjectType):
 
     def resolve_get_friends(self, info, keycloak_user_id):
         # pylint: disable=no-member
-        results = collections.FriendsRequest.objects().aggregate(
+        return collections.FriendsRequest.objects().aggregate(
             [
-                {"$match": {"pairing": keycloak_user_id, "status": "ACCEPTED"}},
+                {"$match": {"pairing": keycloak_user_id}},
                 {"$unwind": "$pairing"},
                 {"$match": {"pairing": {"$ne": keycloak_user_id}}},
-                {"$project": {"_id": 0, "keycloak_user_id": "$pairing"}},
+                {
+                    "$lookup": {
+                        "from": "user",
+                        "localField": "pairing",
+                        "foreignField": "_id",
+                        "as": "user",
+                    }
+                },
+                {
+                    "$project": {
+                        "_id": 0,
+                        "user": {"$arrayElemAt": ["$user", 0]},
+                        "status": 1,
+                    }
+                },
+                {
+                    "$project": {
+                        "keycloak_user_id": "$user._id",
+                        "full_name": "$user.full_name",
+                        "major": "$user.profile.major",
+                        "current_university": "$user.profile.current_university",
+                        "status": 1,
+                    }
+                },
             ]
-        )
-        return collections.User.objects(
-            keycloak_user_id__in=[result["keycloak_user_id"] for result in results]
         )

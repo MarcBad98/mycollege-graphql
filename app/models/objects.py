@@ -32,3 +32,11 @@ class UserType(MongoengineObjectType):
 class FriendsRequestType(MongoengineObjectType):
     class Meta:
         model = collections.FriendsRequest
+
+
+class FriendType(graphene.ObjectType):
+    keycloak_user_id = graphene.String()
+    full_name = graphene.String()
+    major = graphene.String()
+    current_university = graphene.String()
+    status = graphene.String()
