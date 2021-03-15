@@ -2,7 +2,7 @@ import graphene
 
 
 class EmploymentSectionInputType(graphene.InputObjectType):
-    id = graphene.UUID()
+    id = graphene.UUID(required=True)
     title = graphene.String()
     employer = graphene.String()
     date_started = graphene.Date()
@@ -12,7 +12,7 @@ class EmploymentSectionInputType(graphene.InputObjectType):
 
 
 class EducationSectionInputType(graphene.InputObjectType):
-    id = graphene.UUID()
+    id = graphene.UUID(required=True)
     degree = graphene.String()
     school = graphene.String()
     date_started = graphene.Date()
@@ -37,7 +37,13 @@ class UserSettingsInputType(graphene.InputObjectType):
 
 
 class UserInputType(graphene.InputObjectType):
-    keycloak_user_id = graphene.String()
+    keycloak_user_id = graphene.String(required=True)
     full_name = graphene.String()
     profile = graphene.Field(UserProfileInputType)
     settings = graphene.Field(UserSettingsInputType)
+
+
+class FriendsRequestInputType(graphene.InputObjectType):
+    pairing = graphene.List(graphene.String, required=True)
+    status = graphene.String()
+    seen = graphene.Boolean()

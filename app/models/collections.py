@@ -6,13 +6,14 @@ from mongoengine import (
     DateField,
     IntField,
     BooleanField,
+    ListField,
     EmbeddedDocumentField,
     EmbeddedDocumentListField,
 )
 
 
 class EmploymentSection(EmbeddedDocument):
-    id = UUIDField()
+    id = UUIDField(required=True)
     title = StringField()
     employer = StringField()
     date_started = DateField()
@@ -22,7 +23,7 @@ class EmploymentSection(EmbeddedDocument):
 
 
 class EducationSection(EmbeddedDocument):
-    id = UUIDField()
+    id = UUIDField(required=True)
     degree = StringField()
     school = StringField()
     date_started = DateField()
@@ -47,7 +48,19 @@ class UserSettings(EmbeddedDocument):
 
 
 class User(Document):
-    keycloak_user_id = StringField(unique=True)
+    keycloak_user_id = StringField(primary_key=True)
     full_name = StringField()
     profile = EmbeddedDocumentField(UserProfile)
     settings = EmbeddedDocumentField(UserSettings)
+
+    meta = {
+        "indexes": [
+            {"fields": ["$full_name", "$profile.major", "$profile.current_university"]}
+        ]
+    }
+
+
+class FriendsRequest(Document):
+    pairing = ListField(StringField(), required=True)
+    status = StringField(required=True)
+    seen = BooleanField(required=True, default=False)

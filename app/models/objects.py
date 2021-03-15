@@ -29,7 +29,6 @@ class UserType(MongoengineObjectType):
         model = collections.User
 
 
-class TestObjectType(graphene.ObjectType):
-    test1 = graphene.String()
-    test2 = graphene.Boolean()
-    test3 = graphene.Float()
+class FriendsRequestType(MongoengineObjectType):
+    class Meta:
+        model = collections.FriendsRequest
