@@ -40,3 +40,13 @@ class FriendType(graphene.ObjectType):
     major = graphene.String()
     current_university = graphene.String()
     status = graphene.String()
+
+
+class JobApplicationType(MongoengineObjectType):
+    class Meta:
+        model = collections.JobApplication
+
+
+class JobType(MongoengineObjectType):
+    class Meta:
+        model = collections.Job

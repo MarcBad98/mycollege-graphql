@@ -16,6 +16,7 @@ class Query(graphene.ObjectType):
         objects.FriendType,
         keycloak_user_id=graphene.String(required=True),
     )
+    get_jobs = graphene.List(objects.JobType)
 
     def resolve_search_users(self, info, search):
         # pylint: disable=no-member
@@ -58,3 +59,7 @@ class Query(graphene.ObjectType):
                 },
             ]
         )
+
+    def resolve_get_jobs(self, info):
+        # pylint: disable=no-member
+        return collections.Job.objects().all()

@@ -47,3 +47,22 @@ class FriendsRequestInputType(graphene.InputObjectType):
     pairing = graphene.List(graphene.String, required=True)
     status = graphene.String()
     seen = graphene.Boolean()
+
+
+class JobApplicationInputType(graphene.InputObjectType):
+    applicant = graphene.String(required=True)
+    date_graduated = graphene.Date()
+    date_start = graphene.Date()
+    reason = graphene.String()
+
+
+class JobInputType(graphene.InputObjectType):
+    id = graphene.String()
+    poster = graphene.String()
+    title = graphene.String()
+    employer = graphene.String()
+    location = graphene.String()
+    salary = graphene.String()
+    description = graphene.String()
+    saved_by = graphene.List(graphene.String)
+    applications = graphene.List(JobApplicationInputType)

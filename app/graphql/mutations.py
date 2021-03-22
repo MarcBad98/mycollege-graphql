@@ -113,6 +113,96 @@ class DeleteFriendsRequest(graphene.Mutation):
             raise Exception("An unexpected database error occurred.")
 
 
+class CreateJob(graphene.Mutation):
+    class Arguments:
+        inputs = inputs.JobInputType(required=True)
+
+    job = graphene.Field(objects.JobType)
+
+    def mutate(self, info, inputs):
+        # pylint: disable=no-member
+        try:
+            job = collections.Job(**inputs).save()
+            return CreateJob(job=job)
+        except Exception:
+            raise Exception("An unexpected database error occurred.")
+
+
+class UpdateJob(graphene.Mutation):
+    class Arguments:
+        inputs = inputs.JobInputType(required=True)
+
+    job = graphene.Field(objects.JobType)
+
+    def mutate(self, info, inputs):
+        # pylint: disable=no-member
+        if "id" not in inputs:
+            raise Exception("`id` is required for this operation.")
+        try:
+            job = collections.Job.objects(id=inputs["id"])[0]
+            job.modify(**inputs)
+            return UpdateJob(job=job)
+        except Exception:
+            raise Exception("An unexpected database error occurred.")
+
+
+class DeleteJob(graphene.Mutation):
+    class Arguments:
+        inputs = inputs.JobInputType(required=True)
+
+    job = graphene.Field(objects.JobType)
+
+    def mutate(self, info, inputs):
+        # pylint: disable=no-member
+        if "id" not in inputs:
+            raise Exception("`id` is required for this operation.")
+        try:
+            job = collections.Job.objects(id=inputs["id"])[0]
+            job.delete()
+            return DeleteJob(job=job)
+        except Exception:
+            raise Exception("An unexpected database error occurred.")
+
+
+class ToggleSaveJob(graphene.Mutation):
+    class Arguments:
+        is_save = graphene.Boolean(required=True)
+        keycloak_user_id = graphene.String(required=True)
+        job_id = graphene.String(required=True)
+
+    job = graphene.Field(objects.JobType)
+
+    def mutate(self, info, is_save, keycloak_user_id, job_id):
+        # pylint: disable=no-member
+        try:
+            user = collections.User.objects(keycloak_user_id=keycloak_user_id)[0]
+            job = collections.Job.objects(id=job_id)[0]
+            if is_save:
+                job.modify(push__saved_by=user)
+            else:
+                job.modify(pull__saved_by=user)
+            return ToggleSaveJob(job=job)
+        except Exception:
+            raise Exception("An unexpected database error occurred.")
+
+
+class SendJobApplication(graphene.Mutation):
+    class Arguments:
+        inputs = inputs.JobApplicationInputType(required=True)
+        job_id = graphene.String(required=True)
+
+    job = graphene.Field(objects.JobType)
+
+    def mutate(self, info, inputs, job_id):
+        # pylint: disable=no-member
+        try:
+            job = collections.Job.objects(id=job_id)[0]
+            job.modify(push__applications=inputs)
+            return SendJobApplication(job=job)
+        except Exception:
+            raise Exception("An unexpected database error occurred.")
+
+
 class Mutation(graphene.ObjectType):
     create_retrieve_user = CreateRetrieveUser.Field()
     update_user = UpdateUser.Field()
@@ -120,3 +210,8 @@ class Mutation(graphene.ObjectType):
     create_friends_request = CreateFriendsRequest.Field()
     update_friends_request = UpdateFriendsRequest.Field()
     delete_friends_request = DeleteFriendsRequest.Field()
+    create_job = CreateJob.Field()
+    update_job = UpdateJob.Field()
+    delete_job = DeleteJob.Field()
+    toggle_save_job = ToggleSaveJob.Field()
+    send_job_application = SendJobApplication.Field()

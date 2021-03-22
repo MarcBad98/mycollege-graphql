@@ -7,6 +7,7 @@ from mongoengine import (
     IntField,
     BooleanField,
     ListField,
+    ReferenceField,
     EmbeddedDocumentField,
     EmbeddedDocumentListField,
 )
@@ -64,3 +65,21 @@ class FriendsRequest(Document):
     pairing = ListField(StringField(), required=True)
     status = StringField(required=True)
     seen = BooleanField(required=True, default=False)
+
+
+class JobApplication(EmbeddedDocument):
+    applicant = ReferenceField(User)
+    date_graduated = DateField()
+    date_start = DateField()
+    reason = StringField()
+
+
+class Job(Document):
+    poster = ReferenceField(User)
+    title = StringField()
+    employer = StringField()
+    location = StringField()
+    salary = StringField()
+    description = StringField()
+    saved_by = ListField(ReferenceField(User))
+    applications = EmbeddedDocumentListField(JobApplication)
