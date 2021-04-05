@@ -55,6 +55,7 @@ class User(Document):
     full_name = StringField()
     profile = EmbeddedDocumentField(UserProfile)
     settings = EmbeddedDocumentField(UserSettings)
+    is_premium = BooleanField(default=False)
 
     meta = {
         "indexes": [

@@ -41,6 +41,7 @@ class UserInputType(graphene.InputObjectType):
     full_name = graphene.String()
     profile = graphene.Field(UserProfileInputType)
     settings = graphene.Field(UserSettingsInputType)
+    is_premium = graphene.Boolean()
 
 
 class FriendsRequestInputType(graphene.InputObjectType):
