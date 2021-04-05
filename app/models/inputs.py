@@ -50,7 +50,7 @@ class FriendsRequestInputType(graphene.InputObjectType):
 
 
 class JobApplicationInputType(graphene.InputObjectType):
-    applicant = graphene.String(required=True)
+    applicant = graphene.String()
     date_graduated = graphene.Date()
     date_start = graphene.Date()
     reason = graphene.String()
@@ -66,3 +66,13 @@ class JobInputType(graphene.InputObjectType):
     description = graphene.String()
     saved_by = graphene.List(graphene.String)
     applications = graphene.List(JobApplicationInputType)
+
+
+class MessageInputType(graphene.InputObjectType):
+    id = graphene.String()
+    sender = graphene.String()
+    recipient = graphene.String()
+    category = graphene.String()
+    message = graphene.String()
+    sent_on = graphene.Date()
+    seen = graphene.Boolean()

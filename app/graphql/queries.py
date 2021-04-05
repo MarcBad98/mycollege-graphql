@@ -17,6 +17,10 @@ class Query(graphene.ObjectType):
         keycloak_user_id=graphene.String(required=True),
     )
     get_jobs = graphene.List(objects.JobType)
+    get_messages = graphene.List(
+        objects.MessageType,
+        keycloak_user_id=graphene.String(required=True),
+    )
 
     def resolve_search_users(self, info, search):
         # pylint: disable=no-member
@@ -62,4 +66,11 @@ class Query(graphene.ObjectType):
 
     def resolve_get_jobs(self, info):
         # pylint: disable=no-member
-        return collections.Job.objects().all()
+        return collections.Job.objects()
+
+    def resolve_get_messages(self, info, keycloak_user_id):
+        # pylint: disable=no-member
+        return collections.Message.objects(
+            recipient=keycloak_user_id,
+            category="message",
+        )

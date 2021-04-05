@@ -120,7 +120,6 @@ class CreateJob(graphene.Mutation):
     job = graphene.Field(objects.JobType)
 
     def mutate(self, info, inputs):
-        # pylint: disable=no-member
         try:
             job = collections.Job(**inputs).save()
             return CreateJob(job=job)
@@ -203,6 +202,56 @@ class SendJobApplication(graphene.Mutation):
             raise Exception("An unexpected database error occurred.")
 
 
+class SendMessage(graphene.Mutation):
+    class Arguments:
+        inputs = inputs.MessageInputType(required=True)
+
+    message = graphene.Field(objects.MessageType)
+
+    def mutate(self, info, inputs):
+        inputs["category"] = "message"
+        try:
+            message = collections.Message(**inputs).save()
+            return SendMessage(message=message)
+        except Exception:
+            raise Exception("An unexpected database error ocurred.")
+
+
+class ViewMessage(graphene.Mutation):
+    class Arguments:
+        message_id = graphene.String()
+
+    success = graphene.Boolean()
+
+    def mutate(self, info, message_id):
+        # pylint: disable=no-member
+        try:
+            message = collections.Message.objects(id=message_id)[0]
+            message.seen = True
+            message.save()
+            return ViewMessage(success=True)
+        except Exception:
+            raise Exception("An unexpected database error ocurred.")
+
+
+class DeleteMessage(graphene.Mutation):
+    class Arguments:
+        inputs = inputs.MessageInputType(required=True)
+
+    message = graphene.Field(objects.MessageType)
+
+    def mutate(self, info, inputs):
+        # pylint: disable=no-member
+        if "id" not in inputs:
+            raise Exception("`id` is required for this operation.")
+        try:
+            message = collections.Message.objects(id=inputs["id"])[0]
+            message.delete()
+            return DeleteMessage(message=message)
+        except Exception:
+            raise Exception("An unexpected database error ocurred.")
+
+
 class Mutation(graphene.ObjectType):
     create_retrieve_user = CreateRetrieveUser.Field()
     update_user = UpdateUser.Field()
@@ -215,3 +264,6 @@ class Mutation(graphene.ObjectType):
     delete_job = DeleteJob.Field()
     toggle_save_job = ToggleSaveJob.Field()
     send_job_application = SendJobApplication.Field()
+    send_message = SendMessage.Field()
+    view_message = ViewMessage.Field()
+    delete_message = DeleteMessage.Field()

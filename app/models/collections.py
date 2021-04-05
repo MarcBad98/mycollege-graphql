@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from mongoengine import (
     Document,
     EmbeddedDocument,
@@ -83,3 +85,12 @@ class Job(Document):
     description = StringField()
     saved_by = ListField(ReferenceField(User))
     applications = EmbeddedDocumentListField(JobApplication)
+
+
+class Message(Document):
+    sender = ReferenceField(User)
+    recipient = ReferenceField(User)
+    category = StringField()
+    message = StringField()
+    sent_on = DateField(default=datetime.utcnow)
+    seen = BooleanField(default=False)

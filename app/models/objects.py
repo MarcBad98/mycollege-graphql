@@ -50,3 +50,8 @@ class JobApplicationType(MongoengineObjectType):
 class JobType(MongoengineObjectType):
     class Meta:
         model = collections.Job
+
+
+class MessageType(MongoengineObjectType):
+    class Meta:
+        model = collections.Message
