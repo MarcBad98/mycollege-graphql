@@ -1,0 +1,108 @@
+mutation CreateUser ($inputs: UserInputType!) {
+  createRetrieveUser (inputs: $inputs) {
+    user {
+      ...UserData
+    }
+  }
+}
+
+mutation UpdateUser ($inputs: UserInputType!) {
+  updateUser (inputs: $inputs) {
+    user {
+      ...UserData
+    }
+  }
+}
+
+mutation AddFriend ($friend1: String!, $friend2: String!) {
+  # user who approved the friends request
+  friend1: updateUser (inputs: {
+    keycloakUserId: $friend1
+    addFriend: $friend2
+  }) {
+    user {
+      ...UserData
+    }
+  }
+  # user who sent the friends request
+  friend2: updateUser (inputs: {
+    keycloakUserId: $friend2
+    addFriend: $friend1
+  }) {
+    user {
+			keycloakUserId      
+    }
+  }
+}
+
+mutation RemoveFriend ($friend1: String!, $friend2: String!) {
+  # user who rejected the friends request
+  friend1: updateUser (inputs: {
+    keycloakUserId: $friend1
+    removeFriend: $friend2
+  }) {
+    user {
+      ...UserData
+    }
+  }
+  # user who sent the friends request
+  friend2: updateUser (inputs: {
+    keycloakUserId: $friend2
+    removeFriend: $friend1
+  }) {
+    user {
+			keycloakUserId      
+    }
+  }
+}
+
+mutation DeleteUser ($inputs: UserInputType!) {
+  deleteUser (inputs: $inputs) {
+    user {
+      ...UserData
+    }
+  }
+}
+
+query SearchUsers ($search: String!) {
+  searchUsers (search: $search) {
+    ...UserData
+  }
+}
+
+fragment UserData on UserType {
+  keycloakUserId
+  isPlusUser
+  profile {
+    fullName
+    university
+    major
+    about
+    employment {
+      id
+      title
+      employer
+      dateStarted
+      dateEnded
+      location
+      description
+    }
+    education {
+      id
+      degree
+      school
+      dateStarted
+      dateEnded
+      location
+      description
+    }
+  }
+  settings {
+    subscriptionEmail
+    subscriptionSms
+    targetedAdvertising
+    language
+  }
+  friends
+  jobsSaved
+}

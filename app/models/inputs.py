@@ -18,12 +18,13 @@ class EducationSectionInputType(graphene.InputObjectType):
     date_started = graphene.Date()
     date_ended = graphene.Date()
     location = graphene.String()
+    description = graphene.String()
 
 
 class UserProfileInputType(graphene.InputObjectType):
-    title = graphene.String()
+    full_name = graphene.String()
+    university = graphene.String()
     major = graphene.String()
-    current_university = graphene.String()
     about = graphene.String()
     employment = graphene.List(EmploymentSectionInputType)
     education = graphene.List(EducationSectionInputType)
@@ -38,20 +39,27 @@ class UserSettingsInputType(graphene.InputObjectType):
 
 class UserInputType(graphene.InputObjectType):
     keycloak_user_id = graphene.String(required=True)
-    full_name = graphene.String()
+    is_plus_user = graphene.Boolean()
     profile = graphene.Field(UserProfileInputType)
     settings = graphene.Field(UserSettingsInputType)
-    is_premium = graphene.Boolean()
+    # update operations
+    push__friends = graphene.String(name="addFriend")
+    pull__friends = graphene.String(name="removeFriend")
+    push__jobs_saved = graphene.String(name="saveJob")
+    pull__jobs_saved = graphene.String(name="unsaveJob")
 
 
-class FriendsRequestInputType(graphene.InputObjectType):
-    pairing = graphene.List(graphene.String, required=True)
-    status = graphene.String()
-    seen = graphene.Boolean()
+class MessageInputType(graphene.InputObjectType):
+    id = graphene.String()
+    sender = graphene.String()
+    recipient = graphene.String(required=True)
+    category = graphene.String()
+    message = graphene.String()
+    read = graphene.Boolean()
 
 
 class JobApplicationInputType(graphene.InputObjectType):
-    applicant = graphene.String()
+    applicant = graphene.String(required=True)
     date_graduated = graphene.Date()
     date_start = graphene.Date()
     reason = graphene.String()
@@ -59,7 +67,7 @@ class JobApplicationInputType(graphene.InputObjectType):
 
 class JobInputType(graphene.InputObjectType):
     id = graphene.String()
-    poster = graphene.String()
+    poster = graphene.String(required=True)
     title = graphene.String()
     employer = graphene.String()
     location = graphene.String()
@@ -67,13 +75,8 @@ class JobInputType(graphene.InputObjectType):
     description = graphene.String()
     saved_by = graphene.List(graphene.String)
     applications = graphene.List(JobApplicationInputType)
-
-
-class MessageInputType(graphene.InputObjectType):
-    id = graphene.String()
-    sender = graphene.String()
-    recipient = graphene.String()
-    category = graphene.String()
-    message = graphene.String()
-    sent_on = graphene.Date()
-    seen = graphene.Boolean()
+    # update operations
+    push__applications = graphene.Field(
+        JobApplicationInputType,
+        name="addJobApplication",
+    )

@@ -1,0 +1,47 @@
+mutation CreateJob ($inputs: JobInputType!) {
+  createJob (inputs: $inputs) {
+    job {
+      ...JobData
+    }
+  }
+}
+
+mutation UpdateJob ($inputs: JobInputType!) {
+  updateJob (inputs: $inputs) {
+    job {
+      ...JobData
+    }
+  }
+}
+
+mutation DeleteJob ($inputs: JobInputType!) {
+  deleteJob (inputs: $inputs) {
+    job {
+      ...JobData
+    }
+  }
+}
+
+query RetrieveJobs {
+  getJobs {
+    ...JobData
+  }
+}
+
+fragment JobData on JobType {
+  id
+	postedOn
+  poster
+  title
+  employer
+  location
+  salary
+  description
+  applications {
+    appliedOn
+    applicant
+    dateGraduated
+    dateStart
+    reason
+  }
+}

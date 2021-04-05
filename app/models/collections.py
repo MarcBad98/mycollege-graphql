@@ -9,7 +9,6 @@ from mongoengine import (
     IntField,
     BooleanField,
     ListField,
-    ReferenceField,
     EmbeddedDocumentField,
     EmbeddedDocumentListField,
 )
@@ -32,66 +31,63 @@ class EducationSection(EmbeddedDocument):
     date_started = DateField()
     date_ended = DateField()
     location = StringField()
+    description = StringField()
 
 
 class UserProfile(EmbeddedDocument):
-    title = StringField()
+    full_name = StringField()
+    university = StringField()
     major = StringField()
-    current_university = StringField()
     about = StringField()
     employment = EmbeddedDocumentListField(EmploymentSection)
     education = EmbeddedDocumentListField(EducationSection)
 
 
 class UserSettings(EmbeddedDocument):
-    subscription_email = BooleanField()
-    subscription_sms = BooleanField()
-    targeted_advertising = BooleanField()
-    language = StringField()
+    subscription_email = BooleanField(default=False)
+    subscription_sms = BooleanField(default=False)
+    targeted_advertising = BooleanField(default=False)
+    language = StringField(default="English")
 
 
 class User(Document):
     keycloak_user_id = StringField(primary_key=True)
-    full_name = StringField()
-    profile = EmbeddedDocumentField(UserProfile)
-    settings = EmbeddedDocumentField(UserSettings)
-    is_premium = BooleanField(default=False)
+    is_plus_user = BooleanField(default=False)
+    profile = EmbeddedDocumentField(UserProfile, default=lambda: UserProfile())
+    settings = EmbeddedDocumentField(UserSettings, default=lambda: UserSettings())
+    friends = ListField(StringField())
+    jobs_saved = ListField(StringField())
 
     meta = {
         "indexes": [
-            {"fields": ["$full_name", "$profile.major", "$profile.current_university"]}
+            {"fields": ["$profile.full_name", "$profile.university", "$profile.major"]}
         ]
     }
 
 
-class FriendsRequest(Document):
-    pairing = ListField(StringField(), required=True)
-    status = StringField(required=True)
-    seen = BooleanField(required=True, default=False)
+class Message(Document):
+    sent_on = DateField(default=datetime.utcnow)
+    sender = StringField(required=True)
+    recipient = StringField(required=True)
+    category = StringField(choices=["friends-request", "message", "notification"])
+    message = StringField()
+    read = BooleanField(default=False)
 
 
 class JobApplication(EmbeddedDocument):
-    applicant = ReferenceField(User)
+    applied_on = DateField(default=datetime.utcnow)
+    applicant = StringField(required=True)
     date_graduated = DateField()
     date_start = DateField()
     reason = StringField()
 
 
 class Job(Document):
-    poster = ReferenceField(User)
+    posted_on = DateField(default=datetime.now)
+    poster = StringField(required=True)
     title = StringField()
     employer = StringField()
     location = StringField()
     salary = StringField()
     description = StringField()
-    saved_by = ListField(ReferenceField(User))
     applications = EmbeddedDocumentListField(JobApplication)
-
-
-class Message(Document):
-    sender = ReferenceField(User)
-    recipient = ReferenceField(User)
-    category = StringField()
-    message = StringField()
-    sent_on = DateField(default=datetime.utcnow)
-    seen = BooleanField(default=False)

@@ -29,17 +29,9 @@ class UserType(MongoengineObjectType):
         model = collections.User
 
 
-class FriendsRequestType(MongoengineObjectType):
+class MessageType(MongoengineObjectType):
     class Meta:
-        model = collections.FriendsRequest
-
-
-class FriendType(graphene.ObjectType):
-    keycloak_user_id = graphene.String()
-    full_name = graphene.String()
-    major = graphene.String()
-    current_university = graphene.String()
-    status = graphene.String()
+        model = collections.Message
 
 
 class JobApplicationType(MongoengineObjectType):
@@ -50,8 +42,3 @@ class JobApplicationType(MongoengineObjectType):
 class JobType(MongoengineObjectType):
     class Meta:
         model = collections.Job
-
-
-class MessageType(MongoengineObjectType):
-    class Meta:
-        model = collections.Message
