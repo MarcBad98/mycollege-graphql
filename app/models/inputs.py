@@ -55,7 +55,7 @@ class MessageInputType(graphene.InputObjectType):
     recipient = graphene.String(required=True)
     category = graphene.String()
     message = graphene.String()
-    read = graphene.Boolean()
+    resolved = graphene.Boolean()
 
 
 class JobApplicationInputType(graphene.InputObjectType):
