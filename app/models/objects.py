@@ -12,6 +12,10 @@ class MetaDataType(graphene.ObjectType):
     user_is_applicant = graphene.Boolean()
     user_has_saved = graphene.Boolean()
 
+    # UserType
+    user_is_confirmed_friend = graphene.Boolean()
+    user_is_pending_friend = graphene.Boolean()
+
 
 class EmploymentSectionType(MongoengineObjectType):
     class Meta:
@@ -34,6 +38,29 @@ class UserSettingsType(MongoengineObjectType):
 
 
 class UserType(MongoengineObjectType):
+
+    metadata = graphene.Field(
+        MetaDataType,
+        keycloak_user_id=graphene.String(required=True),
+    )
+
+    def resolve_metadata(self, info, keycloak_user_id):
+        # pylint: disable=no-member
+        is_confirmed_friend = keycloak_user_id in self.friends
+        is_pending_friend = (
+            collections.Message.objects(
+                sender=keycloak_user_id,
+                recipient=self.keycloak_user_id,
+                category="friends-request",
+                resolved=False,
+            ).count()
+            == 1
+        )
+        return MetaDataType(
+            user_is_confirmed_friend=is_confirmed_friend,
+            user_is_pending_friend=is_pending_friend,
+        )
+
     class Meta:
         model = collections.User
 

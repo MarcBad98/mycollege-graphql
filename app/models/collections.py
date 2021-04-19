@@ -71,7 +71,7 @@ class Message(Document):
     recipient = StringField(required=True)
     category = StringField(choices=["friends-request", "message", "notification"])
     message = StringField()
-    read = BooleanField(default=False)
+    resolved = BooleanField(default=False)
 
 
 class JobApplication(EmbeddedDocument):
