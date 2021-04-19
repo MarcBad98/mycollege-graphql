@@ -15,6 +15,7 @@ class MetaDataType(graphene.ObjectType):
     # UserType
     user_is_confirmed_friend = graphene.Boolean()
     user_is_pending_friend = graphene.Boolean()
+    user_sent_friends_request = graphene.Boolean()
 
 
 class EmploymentSectionType(MongoengineObjectType):
@@ -56,9 +57,19 @@ class UserType(MongoengineObjectType):
             ).count()
             == 1
         )
+        sent_friends_request = (
+            collections.Message.objects(
+                sender=self.keycloak_user_id,
+                recipient=keycloak_user_id,
+                category="friends-request",
+                resolved=False,
+            ).count()
+            == 1
+        )
         return MetaDataType(
             user_is_confirmed_friend=is_confirmed_friend,
             user_is_pending_friend=is_pending_friend,
+            user_sent_friends_request=sent_friends_request,
         )
 
     class Meta:
