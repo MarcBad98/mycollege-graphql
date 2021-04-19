@@ -42,6 +42,8 @@ class UserInputType(graphene.InputObjectType):
     is_plus_user = graphene.Boolean()
     profile = graphene.Field(UserProfileInputType)
     settings = graphene.Field(UserSettingsInputType)
+    # query operations
+    friends = graphene.String(name="friend")
     # update operations
     push__friends = graphene.String(name="addFriend")
     pull__friends = graphene.String(name="removeFriend")

@@ -8,6 +8,10 @@ class Query(graphene.ObjectType):
         objects.UserType,
         search=graphene.String(required=True),
     )
+    get_users = graphene.List(
+        objects.UserType,
+        inputs=inputs.UserInputType(),
+    )
     get_messages = graphene.List(
         objects.MessageType,
         inputs=inputs.MessageInputType(),
@@ -20,6 +24,12 @@ class Query(graphene.ObjectType):
     def resolve_search_users(self, info, search):
         # pylint: disable=no-member
         return collections.User.objects.search_text(search)
+
+    def resolve_get_users(self, info, inputs=None):
+        # pylint: disable=no-member
+        if inputs is None:
+            inputs = {}
+        return collections.User.objects(**inputs)
 
     def resolve_get_messages(self, info, inputs=None):
         # pylint: disable=no-member
