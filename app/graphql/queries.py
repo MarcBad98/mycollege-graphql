@@ -35,10 +35,10 @@ class Query(graphene.ObjectType):
         # pylint: disable=no-member
         if inputs is None:
             inputs = {}
-        return collections.Message.objects(**inputs)
+        return collections.Message.objects(**inputs).order_by("-sent_on")
 
     def resolve_get_jobs(self, info, inputs=None):
         # pylint: disable=no-member
         if inputs is None:
             inputs = {}
-        return collections.Job.objects(**inputs)
+        return collections.Job.objects(**inputs).order_by("-posted_on")
