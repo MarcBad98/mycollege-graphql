@@ -73,7 +73,6 @@ class JobInputType(graphene.InputObjectType):
     location = graphene.String()
     salary = graphene.String()
     description = graphene.String()
-    saved_by = graphene.List(graphene.String)
     applications = graphene.List(JobApplicationInputType)
     # update operations
     push__applications = graphene.Field(
