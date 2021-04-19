@@ -2,7 +2,7 @@ import graphene
 
 
 class EmploymentSectionInputType(graphene.InputObjectType):
-    id = graphene.UUID(required=True)
+    id = graphene.UUID()
     title = graphene.String()
     employer = graphene.String()
     date_started = graphene.Date()
@@ -12,7 +12,7 @@ class EmploymentSectionInputType(graphene.InputObjectType):
 
 
 class EducationSectionInputType(graphene.InputObjectType):
-    id = graphene.UUID(required=True)
+    id = graphene.UUID()
     degree = graphene.String()
     school = graphene.String()
     date_started = graphene.Date()
@@ -38,7 +38,7 @@ class UserSettingsInputType(graphene.InputObjectType):
 
 
 class UserInputType(graphene.InputObjectType):
-    keycloak_user_id = graphene.String(required=True)
+    keycloak_user_id = graphene.String()
     is_plus_user = graphene.Boolean()
     profile = graphene.Field(UserProfileInputType)
     settings = graphene.Field(UserSettingsInputType)
@@ -54,14 +54,14 @@ class UserInputType(graphene.InputObjectType):
 class MessageInputType(graphene.InputObjectType):
     id = graphene.String()
     sender = graphene.String()
-    recipient = graphene.String(required=True)
+    recipient = graphene.String()
     category = graphene.String()
     message = graphene.String()
     resolved = graphene.Boolean()
 
 
 class JobApplicationInputType(graphene.InputObjectType):
-    applicant = graphene.String(required=True)
+    applicant = graphene.String()
     date_graduated = graphene.Date()
     date_start = graphene.Date()
     reason = graphene.String()
@@ -69,7 +69,7 @@ class JobApplicationInputType(graphene.InputObjectType):
 
 class JobInputType(graphene.InputObjectType):
     id = graphene.String()
-    poster = graphene.String(required=True)
+    poster = graphene.String()
     title = graphene.String()
     employer = graphene.String()
     location = graphene.String()
