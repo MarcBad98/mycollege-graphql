@@ -70,6 +70,7 @@ class Message(Document):
     sender = StringField(required=True)
     recipient = StringField(required=True)
     category = StringField(choices=["friends-request", "message", "notification"])
+    title = StringField()
     message = StringField()
     resolved = BooleanField(default=False)
 

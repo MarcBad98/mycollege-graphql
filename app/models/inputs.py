@@ -56,6 +56,7 @@ class MessageInputType(graphene.InputObjectType):
     sender = graphene.String()
     recipient = graphene.String()
     category = graphene.String()
+    title = graphene.String()
     message = graphene.String()
     resolved = graphene.Boolean()
 
