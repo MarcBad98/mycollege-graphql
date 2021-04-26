@@ -20,6 +20,10 @@ class Query(graphene.ObjectType):
         objects.JobType,
         inputs=inputs.JobInputType(),
     )
+    get_courses = graphene.List(
+        objects.CourseType,
+        inputs=inputs.CourseInputType(),
+    )
 
     def resolve_search_users(self, info, search):
         # pylint: disable=no-member
@@ -42,3 +46,9 @@ class Query(graphene.ObjectType):
         if inputs is None:
             inputs = {}
         return collections.Job.objects(**inputs).order_by("-posted_on")
+
+    def resolve_get_courses(self, info, inputs=None):
+        # pylint: disable=no-member
+        if inputs is None:
+            inputs = {}
+        return collections.Course.objects(**inputs)
