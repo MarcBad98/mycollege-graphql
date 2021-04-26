@@ -23,6 +23,12 @@ class CreateRetrieveUser(UserBaseMutation):
         if user.count() == 0:
             user = collections.User(**inputs)
             user.save()
+            collections.Message(
+                sender="SYSTEM",
+                recipient=user.keycloak_user_id,
+                category="notification",
+                title="Don't forget to update your profile!",
+            ).save()
             return CreateRetrieveUser(user=user)
         else:
             return CreateRetrieveUser(user=user[0])
@@ -61,6 +67,20 @@ class CreateMessage(MessageBaseMutation):
     def mutate(self, info, inputs):
         message = collections.Message(**inputs)
         message.save()
+        if inputs["category"] == "friends-request":
+            collections.Message(
+                sender="SYSTEM",
+                recipient=inputs["recipient"],
+                category="notification",
+                title="You have friend requests waiting for you!",
+            ).save()
+        if inputs["category"] == "message":
+            collections.Message(
+                sender="SYSTEM",
+                recipient=inputs["recipient"],
+                category="notification",
+                title="You have messages waiting for you!",
+            ).save()
         return CreateMessage(message=message)
 
 
@@ -97,6 +117,14 @@ class CreateJob(JobBaseMutation):
     def mutate(self, info, inputs):
         job = collections.Job(**inputs)
         job.save()
+        for user in collections.User.objects():
+            if user.keycloak_user_id != job.poster:
+                collections.Message(
+                    sender="SYSTEM",
+                    recipient=user.keycloak_user_id,
+                    category="notification",
+                    title=f"A new job ({job.title}) has been posted!",
+                ).save()
         return CreateJob(job=job)
 
 
@@ -113,6 +141,13 @@ class DeleteJob(JobBaseMutation):
         # pylint: disable=no-member
         job = collections.Job.objects(id=inputs["id"])[0]
         job.delete()
+        for application in job.applications:
+            collections.Message(
+                sender="SYSTEM",
+                recipient=application.applicant,
+                category="notification",
+                title=f"A job ({job.title}) you have applied for was deleted!",
+            ).save()
         return DeleteJob(job=job)
 
 
