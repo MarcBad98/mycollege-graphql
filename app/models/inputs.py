@@ -77,6 +77,11 @@ class JobInputType(graphene.InputObjectType):
     salary = graphene.String()
     description = graphene.String()
     applications = graphene.List(JobApplicationInputType)
+    # query operations
+    applications__match = graphene.Field(
+        JobApplicationInputType,
+        name="matchJobApplication",
+    )
     # update operations
     push__applications = graphene.Field(
         JobApplicationInputType,
