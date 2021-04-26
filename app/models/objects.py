@@ -112,3 +112,8 @@ class JobType(MongoengineObjectType):
 
     class Meta:
         model = collections.Job
+
+
+class CourseType(MongoengineObjectType):
+    class Meta:
+        model = collections.Course

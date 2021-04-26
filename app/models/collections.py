@@ -57,6 +57,7 @@ class User(Document):
     settings = EmbeddedDocumentField(UserSettings, default=lambda: UserSettings())
     friends = ListField(StringField())
     jobs_saved = ListField(StringField())
+    courses = ListField(StringField())
 
     meta = {
         "indexes": [
@@ -92,3 +93,8 @@ class Job(Document):
     salary = StringField()
     description = StringField()
     applications = EmbeddedDocumentListField(JobApplication)
+
+
+class Course(Document):
+    title = StringField()
+    auth_required = BooleanField()

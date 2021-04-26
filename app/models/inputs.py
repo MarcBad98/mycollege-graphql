@@ -49,6 +49,7 @@ class UserInputType(graphene.InputObjectType):
     pull__friends = graphene.String(name="removeFriend")
     push__jobs_saved = graphene.String(name="saveJob")
     pull__jobs_saved = graphene.String(name="unsaveJob")
+    push__courses = graphene.String(name="takeCourse")
 
 
 class MessageInputType(graphene.InputObjectType):
@@ -87,3 +88,9 @@ class JobInputType(graphene.InputObjectType):
         JobApplicationInputType,
         name="addJobApplication",
     )
+
+
+class CourseInputType(graphene.InputObjectType):
+    id = graphene.String()
+    title = graphene.String()
+    auth_required = graphene.Boolean()
